@@ -1,0 +1,16 @@
+{
+  "name": "sound-detect",
+  "version": "1.0.0",
+  "description": "",
+  "main": "silence-detector.js",
+  "dependencies": {
+    "fluent-ffmpeg": "^2.1.2",
+    "mqtt": "^4.3.7"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
