@@ -4,10 +4,15 @@ const client  = mqtt.connect('mqtt://' + process.env.MQTT_HOST);
 
 // const STREAM_URL = 'http://icecast.radio24.ch/radio24-rc-96-aac';
 const STREAM_URL = process.env.STREAM_URL;
+let lastSent = 0;
 
 getMeanVolume(STREAM_URL, function callback(meanVolume){
   console.log('volume', meanVolume)
-  client.publish('audio-detector/' + process.env.NAME, '' + meanVolume);
+  if(Math.abs(lastSent - meanVolume) > 5){
+    console.log('Sending volume to MQTT');
+    client.publish('audio-detector/' + process.env.NAME, '' + meanVolume);
+    lastSent = meanVolume;
+  }
   getMeanVolume(STREAM_URL, callback);
 });
 

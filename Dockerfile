@@ -8,7 +8,8 @@ WORKDIR /app
 
 COPY package.json package.json
 COPY package-lock.json package-lock.json
-COPY silence-detector.js silence-detector.js
 RUN npm install
+
+COPY silence-detector.js silence-detector.js
 
 CMD node /app/silence-detector.js
