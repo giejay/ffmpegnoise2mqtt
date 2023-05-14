@@ -10,13 +10,19 @@ getMeanVolume(STREAM_URL, function callback(meanVolume){
   console.log('volume', meanVolume)
   if(Math.abs(lastSent - meanVolume) > 5){
     console.log('Sending volume to MQTT');
-    client.publish('audio-detector/' + process.env.NAME, '' + meanVolume);
+    if(client.connected){
+      client.publish('audio-detector/' + process.env.NAME, '' + meanVolume);
+      console.log('Published message');
+    } else {
+      throw Error('Client disconnected!');
+    }
     lastSent = meanVolume;
   }
   getMeanVolume(STREAM_URL, callback);
 });
 
 function getMeanVolume(streamUrl, callback){
+  console.log('Getting volume!');
  new Ffmpeg({ source: streamUrl })
   .withAudioFilter('volumedetect')
   .addOption('-f', 'null')
@@ -42,6 +48,9 @@ function getMeanVolume(streamUrl, callback){
     if(stderr.match(/Server returned 404 Not Found/)){
       return callback(false);
     }
+
+    console.log('regex not matched');
+    return callback(-100)
  })
  .saveToFile('/dev/null');
 }
